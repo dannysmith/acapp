@@ -1,0 +1,10 @@
+sinatra
+dm-core
+dm-validations
+dm-timestamps
+mustache
+rack-flash
+chronic
+httparty
+shorturl
+haml
