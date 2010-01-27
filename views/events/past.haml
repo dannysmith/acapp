@@ -1,0 +1,18 @@
+%h2 Old Activities
+
+%p These activities have <strong>now passed</strong> and are here for information only.
+
+%table.eventlist
+  %thead
+    %tr
+      %th Title
+      %th Date
+  %tbody
+    - @past_events.each do |event|
+      %tr
+        %td
+          %a{:href => "/events/#{event.id}"} #{event.truncated_title}
+        %td #{event.date}
+  
+
+        

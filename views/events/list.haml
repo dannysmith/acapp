@@ -1,0 +1,19 @@
+%h2 Future Activities
+
+%p These are our forthcoming activities. You need to tell us whether you will be attending or not. To do this, click on the activity, read the details and follow the instructions.
+
+%table.eventlist
+  %thead
+    %tr
+      %th Activity
+      %th Date
+  %tbody
+    - @future_events.each do |event|
+      %tr
+        %td
+          %a{:href => "/events/#{event.id}"} #{event.truncated_title}
+        %td #{event.date}
+  
+
+        
+      

@@ -1,0 +1,18 @@
+%h2 New Activity
+%form{:action => "/events", :method => :post}
+  %label Title
+  %input#title{:type => :text, :name => :title}
+  %br
+  %label Details
+  %textarea.tinymce{:name => :description}
+  %br
+  %label Starts
+  %input#starts_at{:type => :text, :name => :starts_at}
+  %br
+  %label Ends
+  %input#finishes_at{:type => :text, :name => :finishes_at}
+  
+  .date_info
+    = haml :'events/_date_info', :layout => false
+  %br
+  %input{:type => :submit, :value => "Submit"}

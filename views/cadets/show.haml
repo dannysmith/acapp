@@ -1,0 +1,36 @@
+%h2 Record for #{@cadet.full_name} (Section #{@cadet.section})
+
+%h3 Activities you've signed up for
+%p These are the activities you've agreed to attend.
+%table.eventlist
+  %thead
+    %tr
+      %th Activity
+      %th Date
+  %tbody
+    - @cadet.future_events.each do |event|
+      %tr
+        %td
+          %a{:href => "/events/#{event.id}"} #{event.truncated_title}
+        %td #{event.date}
+
+%h3 Activities you need to respond to!
+%p.important It's important that you let us know whether you'll be attending these events.
+%table.eventlist
+  %thead
+    %tr
+      %th Activity
+      %th Date
+  %tbody
+    - @require_response.each do |event|
+      %tr
+        %td
+          %a{:href => "/events/#{event.id}"} #{event.truncated_title}
+        %td #{event.date}
+                     
+%form{:method => :post, :action => "/cadets/#{@cadet.id}"}
+  %fieldset
+    %legend Record Administration
+    %input{:type => :hidden, :name => :_method, :value => "delete"}
+    %input{:type => :submit, :value => "Delete"}
+    %a{:href => "/cadets/#{@cadet.id}/edit"} Edit

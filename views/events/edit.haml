@@ -1,0 +1,26 @@
+%h2 Edit Activity
+
+%form{:action => "/events/#{@event.id}", :method => :post}
+
+  %input{:type => :hidden, :name => :_method, :value => "put"}
+  
+  %label{:name => :title} Title
+  %input#title{:type => :text, :name => :title, :value => @event.title}
+  
+  %br
+  %label{:name => :details} Details
+  %textarea.tinymce{:name => :description} #{@event.description}
+  %br
+  
+  %label{:name => :starts_at} Starts
+  %input#starts_at{:type => :text, :name => :starts_at, :value => @event.start_date_for_edit}
+  
+  %br
+  %label{:name => :finishes_at} Ends
+  %input#finishes_at{:type => :text, :name => :finishes_at, :value => @event.finish_date_for_edit}
+  
+  .date_info
+    = haml :'events/_date_info', :layout => false
+  %br
+  
+  %input.submit{:type => :submit, :value => "Submit"}

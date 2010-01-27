@@ -1,0 +1,15 @@
+%h2 Cadets with Access Codes
+%p These access codes are to be kept private. Each cadets should be told their access code when their record is created.
+
+%table.eventlist
+  %thead
+    %tr
+      %th Cadet
+      %th Access Code
+  %tbody
+    - @cadets.each do |cadet|
+      %tr
+        %td
+          %a{:href => "/cadets/#{cadet.id}"} #{cadet.full_name}
+        %td #{cadet.code}
+      

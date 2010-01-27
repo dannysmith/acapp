@@ -1,0 +1,8 @@
+%h2 List of Cadets
+
+%p Click on your name in the list below to see the activities you've signed up for and the activities you still need to respond to.
+
+%ul.userlist
+  - @cadets.each do |cadet|
+    %li
+      %a{:href => "/cadets/#{cadet.id}"} #{cadet.full_name}

@@ -1,0 +1,60 @@
+!!!
+%html
+  %head
+    %title Brighton air Cadets - Events Manager
+    %meta{"http-equiv" => "content-type", :content => "application/xhtml+xml; charset=utf-8"}
+    %meta{:name => :author, :content => "Danny Smith (dasmith.co.uk)"}
+    
+    %link{:rel => "stylesheet", :href => "http://brightonaircadets.com/styles.css", :media => "screen,projection", :type => "text/css"}    
+    %link{:rel => "stylesheet", :href => "/styles.css", :media => "screen,projection", :type => "text/css"}    
+    %link{:rel => "shortcut icon", :href => "http://brightonaircadets.com/favicon.png"}
+    
+    %script{ :type=>"text/javascript", :src => "https://www.google.com/jsapi"}
+    %script
+      google.load('jquery', '1.3.2');
+    %script{ :type => "text/javascript", :src => "/jquery.ie6blocker.js"}   
+    %script{ :type => "text/javascript", :src => "/tiny_mce/jquery.tinymce.js"}   
+    %script{ :type => "text/javascript", :src => "/application.js"}
+    
+  %body#acapp
+    #header-wrap
+      #header
+        %h1 Brighton Air Cadets
+        %h3 squadron administration
+        #nav
+          %ul
+            %li.current-page Activity Management
+            |
+    
+    #wrapper
+      #sidebar
+        .box
+          %h4 Activities Navigation
+          %ul
+            %li
+              %a{:href => "/cadets"} Cadets
+            %li
+              %a{:href => "/events"} Future Activities
+            %li
+              %a{:href => "/events/past"} Past Activities
+            %li
+              %a{:href => "/events/new"} Add an event
+            %li
+              %a{:href => "/cadets/new"} Add a new cadet
+        
+        
+        .box
+          %h4 Talk to us
+          <p id="facebook"><a href="http://www.facebook.com/pages/Brighton-Air-Cadets/212058427146" target="_blank"><img src="http://brightonaircadets.com/images/facebook.jpg" alt="See our facebook pages" /></a></p>
+          <p id="twitter"><a href="http://twitter.com/brightoncadets" target="_blank"><img src="http://brightonaircadets.com/images/twitter.png" alt="Follow us on twitter" /></a></p>
+
+        .box#copyright
+          %p &copy; Copyright 2009 226 (Brighton) Sqn, ATC. All Rights Reserved.
+          %p Design & Development by <a href="http://dasmith.co.uk">Danny Smith</a></p>
+
+      #content
+        - if flash[:message]
+          .flash
+            = flash[:message]
+      
+        = yield

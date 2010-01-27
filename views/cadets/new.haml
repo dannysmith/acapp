@@ -1,0 +1,14 @@
+%h2 New Cadet
+%form{:method => :post, :action => "/cadets"}
+  %label{:name => :first_name} Name
+  %input#first_name{:type => :text, :name => :first_name}
+  %input#surname{:type => :text, :name => :surname}
+  
+  %br
+  %label{:name => :first_name} Section
+  %input#section.short{:type => :text, :name => :section, :size => 3}
+  
+  %br
+  %input.submit{:type => :submit, :value => "Submit"}
+  
+%p You will be provided with an Auth Code. <strong>It is important that you give this to the cadet</strong> you're adding so that they can use the system.

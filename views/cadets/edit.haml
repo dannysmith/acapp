@@ -1,0 +1,17 @@
+%h2 Edit Cadet
+%form{:method => :post, :action => "/cadets/#{@cadet.id}"}
+  %input{:type => :hidden, :name => :_method, :value => "put"}
+  %label{:name => :first_name} Name
+  %input#first_name{:type => :text, :name => :first_name, :value => @cadet.first_name}
+  %input#surname{:type => :text, :name => :surname, :value => @cadet.surname}
+  
+  %br
+  %label{:name => :first_name} Section
+  %input#section.short{:type => :text, :name => :section, :size => 3, :value => @cadet.section}
+  
+  %br
+  %label Access Code
+  %input#code.short{:type => :text, :name => :code, :size => 3, :value => @cadet.code}
+  
+  %br
+  %input.submit{:type => :submit, :value => "Submit"}

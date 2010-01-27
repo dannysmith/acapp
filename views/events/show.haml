@@ -1,0 +1,53 @@
+%h2 #{@event.title}
+%p.date #{@event.date}
+
+%p.description #{@event.description}
+%p.timing Starts at: #{@event.start_time}, #{@event.start_date}
+%p.timing Finishes at: #{@event.finish_time}, #{@event.finish_date}
+
+%form{:method => :post, :action => "/events/#{@event.id}/allocate"}
+  %fieldset.allocate
+    %legend Are you attending?
+    %label{:name => :cadet_id} Name
+    %select#cadet_id{:name => :cadet_id}
+      %option{:value => "nil"} Select your name...
+      - @cadets.each do |c|
+        %option{:value => c.id} #{c.full_name}
+        
+    %br
+    %label{:name => :attending} Attending?
+    %input#attending{:type => :radio, :name => :attending, :value => :true} Yes
+    %input#attending{:type => :radio, :name => :attending, :value => :false} No
+    
+    %br
+    %label{:name => :code} Your Code
+    %input#code.short{:type => :text, :name => :code, :size => 3}
+    
+    %p I will <span id="not_be">not </span>be attending the above event.
+    %input#submit_form{:type => :submit, :value => "Submit"}
+    
+#lists_container
+  .list
+    %h3 Attending
+    %ul
+      - @attending_cadets.each do |c|
+        %li #{c.full_name}
+  .list
+    %h3 Not Attending
+    %ul
+      - @absent_cadets.each do |c|
+        %li #{c.full_name}
+  .list
+    %h3 Not Responded
+    %ul
+      - @cadets_not_responded.each do |c|
+        %li #{c.full_name} 
+      
+          
+%form{:method => :post, :action => "/events/#{@event.id}"}
+  %fieldset
+    %legend Event Administration
+    %input{:type => :hidden, :name => :_method, :value => "delete"}
+    %input{:type => :submit, :value => "Delete"}
+    %a{:href => "/events/#{@event.id}/edit"} Edit
+

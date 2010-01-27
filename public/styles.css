@@ -1,0 +1,126 @@
+#acapp #content {
+  min-height: 400px;
+}
+#acapp .list {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+#acapp #sidebar > .box:first-child {
+  /* Navigation */
+  width: auto;
+  height: auto;
+  background-color: #fff;
+  background-image: none;
+}
+
+#acapp #sidebar > .box:first-child a {
+    color: #000;
+}
+
+#acapp #sidebar > .box:first-child a:hover {
+    text-decoration: underline;
+}
+
+#acapp #sidebar > .box:first-child h4 {
+  border-bottom: 1px solid #C2C8D2;
+  margin-bottom: 2px;
+  font-weight: bold;
+  font-size: 1em;
+  text-align: left;
+}
+
+#acapp ul {
+  margin-left: 2em;
+}
+
+#acapp table {
+  border: 1px solid #C2C8D2;
+  background-color:  #FAEE98; //#FBDF37;
+  margin-bottom: 3em;
+}
+
+#acapp table thead {
+  font-weight: normal;
+  font-size: 1.1em;
+  padding-bottom: 0.5em;
+  padding-top: 0.5em;
+  margin-bottom: 0.5em;
+  padding-left: 90px;
+  color: #fff;
+  background-color: #395C98;
+}
+
+#acapp #content h3 {
+  font-weight: normal;
+  font-size: 1.4em;
+  margin-bottom: 1em;
+  border-bottom: 1px solid #C2C8D2;
+  width: 660px;
+}
+
+#acapp input[type="text"], input[type="password"], textarea {
+  color: #575555;
+  background: #fff;
+  border: 1px solid #C2C8D2;
+  width: 200px;
+  font-size: 1.3em;
+}
+
+#acapp input[type="text"].short {
+  width: 60px;
+}
+
+#acapp #title {
+  width: 550px;
+  font-size: 2em;
+}
+
+#acapp textarea {
+  height: 150px;
+}
+
+#acapp textarea.tinymce {
+  width: 550px;
+}
+
+#acapp input.submit {
+  margin-left: 90px;
+  margin-top: 1em;
+}
+#acapp label {
+  width: 90px;
+  float: left;
+  text-align: right;
+  margin-right: 0.5em;
+  display: block;
+}
+
+#acapp .date {
+  font-color: #C2C8D2;
+  font-size: 1.2em;
+  margin-top: -1em;
+}
+
+#acapp .timing {
+  font-size: 0.8em;
+  text-decoration: italic;
+  margin-bottom: 0;
+}
+
+#acapp.allocate p {
+  display: none;
+}
+
+#acapp .date_info {
+  font-size: 0.75em;
+  margin-left: 90px;
+}
+
+#acapp .flash {
+  background: #FAEE98;
+  font-size: 1.2em;
+  padding: 5px 10px 5px 10px;
+  margin-bottom: 10px;
+  width: 630px;
+}
