@@ -49,8 +49,6 @@ end
 #  
 #end
 
-DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/activitiesapp.sqlite3")
-
 class Cadet
   include DataMapper::Resource
 
@@ -156,7 +154,15 @@ class Allocation
   belongs_to :cadet
 end
 
-DataMapper.auto_upgrade!
+configure do
+  # Heroku has some valuable information in the environment variables.
+  # DATABASE_URL is a complete URL for the Postgres database that Heroku
+  # provides for you, something like: postgres://user:password@host/db, which
+  # is what DM wants. This is also a convenient check wether we're in production
+  # / not.
+  DataMapper.setup(:default, (ENV["DATABASE_URL"] || "sqlite3:///#{Dir.pwd}/activitiesapp.sqlite3"))
+  DataMapper.auto_upgrade!
+end
 
 #--------------Helper Methods--------------------------------------------
 helpers do
