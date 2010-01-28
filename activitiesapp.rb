@@ -1,53 +1,26 @@
-require 'rubygems'
-require 'sinatra'
-require 'dm-core'
-require 'dm-validations'
-require 'dm-timestamps'
-require 'mustache'
-require 'rack-flash'
-require 'chronic'
-require 'httparty'
-require 'shorturl'
-require 'haml'
-
+%w(rubygems sinatra dm-core dm-validations dm-timestamps rack-flash chronic httparty shorturl haml yaml).each {|r| require r}
 enable :sessions
 use Rack::Flash
 
-#Set the Password for HTTP Auth
-PASSWORD = 'Telegraph'
-SITE_URL = "http://localhost:4567" #don't include trailing slash
-TWITTER_USERNAME = 'bactester'
-TWITTER_PASS = 'telegraph'
+#--------- Overides & Classes
 
-#Additional to_dateTime method
+#Converts Time to dateTime
 class Time
   def to_datetime
-    # Convert seconds + microseconds into a fractional number of seconds
     seconds = sec + Rational(usec, 10**6)
-
-    # Convert a UTC offset measured in minutes to one measured in a
-    # fraction of a day.
     offset = Rational(utc_offset, 60 * 60 * 24)
     DateTime.new(year, month, day, hour, min, seconds, offset)
   end
 end
 
-#Twitter Class
+#Twitter Class for posting.
 class Twitter
   include HTTParty
   base_uri "twitter.com"
-  basic_auth TWITTER_USERNAME, TWITTER_PASS
+  basic_auth ENV["twitter_user"], ENV["twitter_pass"]
 end
 
-#TinyURL Class for shortening URLs
-#class TinyURL
-#  include HTTParty
-#  
-#  def self.shorten(url)
-#    get("http://tinyurl.com/api-create.php?url=#{url}")
-#  end
-#  
-#end
+#--------- Models
 
 class Cadet
   include DataMapper::Resource
@@ -60,8 +33,6 @@ class Cadet
   property :created_at, DateTime
   property :updated_at, DateTime
 
-  # validates_present :body
-
   has n, :allocations
   has n, :events, :through => :allocations
 
@@ -69,8 +40,9 @@ class Cadet
     return "#{self.surname}, #{self.first_name}"
   end
   
+  #The future events that the cadet is attending.
   def future_events
-    self.allocations.all(:attending => true).cadets.events.all(:starts_at.gt => Time.now, :order => [ :starts_at.asc ])
+    self.allocations.all(:attending => true).events.all(:starts_at.gt => Time.now, :order => [ :starts_at.asc ])
   end
 end
 
@@ -85,7 +57,6 @@ class Event
   property :created_at,   DateTime
   property :updated_at,   DateTime
 
-  
   has n, :allocations
   has n, :cadets, :through => :allocations
   
@@ -148,51 +119,53 @@ class Allocation
   property :created_at, DateTime
   property :updated_at, DateTime
 
-  # validates_present :body
-
   belongs_to :event
   belongs_to :cadet
 end
 
+#--------- Configuration Block
+
 configure do
-  # Heroku has some valuable information in the environment variables.
-  # DATABASE_URL is a complete URL for the Postgres database that Heroku
-  # provides for you, something like: postgres://user:password@host/db, which
-  # is what DM wants. This is also a convenient check wether we're in production
-  # / not.
+  #Load passwords from config file
+  if File.exist?("./config.yml") 
+    yaml = YAML.load_file("./config.yml")
+    yaml.each do |k, v|
+      ENV[k] = v
+    end
+  end
+    
+  # Checks whether we're on heroku or local. Loads correct DB.
   DataMapper.setup(:default, (ENV["DATABASE_URL"] || "sqlite3:///#{Dir.pwd}/activitiesapp.sqlite3"))
   DataMapper.auto_upgrade!
 end
 
-#--------------Helper Methods--------------------------------------------
+#--------- Helper Methods
+
 helpers do
 
   def protected!
     unless authorized?
-      response['WWW-Authenticate'] = %(Basic realm="226 Events Mgmt Staff")
+      response['WWW-Authenticate'] = %(Basic realm="226 Activities Mgmt Staff")
       throw(:halt, [401, "Not authorized\n"])
     end
   end
 
   def authorized?
     @auth ||=  Rack::Auth::Basic::Request.new(request.env)
-    @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == ['226', PASSWORD]
+    @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == ['226', ENV["admin_pass"]]
   end
 
 end
-#-------------Generic Page handlers---------------------------------------------
+
+#--------- Page Handlers - General
 
 # Home
 get '/' do
   redirect '/events'
 end
 
+#--------- Page Handlers - Cadets
 
-
-
-
-
-#-------------------- Cadet Page Handlers ----------------------------
 # List Cadets
 get '/cadets/?' do
   @cadets = Cadet.all(:order => [ :surname.asc ])
@@ -277,7 +250,8 @@ put '/cadets/:id' do
 end
 
 
-#----------- Events Handlers ----------------------
+#--------- Page Handlers - Events & Allocations
+
 #List Events
 get '/events/?' do
   @future_events = Event.all(:starts_at.gt => Time.now, :order => [ :starts_at.asc ])
@@ -306,7 +280,7 @@ post '/events' do
   if @event.save
     flash[:message] = "Event Created & message sent to Twitter"
     #Post message to Twitter
-    url = "#{SITE_URL}/events/#{@event.id}"
+    url = "#{ENV["site_url"]}/events/#{@event.id}"
     message = "New forthcoming activity: #{@event.truncated_title} #{ShortURL.shorten(url, :tinyurl)}"
     tweet = Twitter.post("/statuses/update.json", :query => {:status => message})
     redirect "/events/#{@event.id}"
@@ -345,16 +319,12 @@ get '/events/:id/?' do
    end
 end
 
-
-
 #Show Event Edit Form
 get '/events/:id/edit/?' do
   protected!
   @event = Event.get(params[:id])
   haml :'events/edit'
 end
-
-
 
 #Create or update an allocation
 post '/events/:id/allocate/?' do
@@ -377,11 +347,7 @@ post '/events/:id/allocate/?' do
   end
   
 end
- 
- 
- 
- 
- 
+
 #Return whether a cadet is attending an event?
 get '/events/:event_id/check/:cadet_id' do
   @allocation = Allocation.get(params[:cadet_id], params[:event_id])
@@ -392,11 +358,6 @@ get '/events/:event_id/check/:cadet_id' do
     "nil"
   end
 end
-
-
-
-
-
 
 #Display those attending
 get '/events/:id/attending' do
@@ -416,12 +377,6 @@ get '/events/:id/noresponse' do
   haml :'events/listing', :layout => false
 end
 
-
-
-
-
-
-
 #Update Event
 put '/events/:id' do
   protected!
@@ -438,4 +393,3 @@ put '/events/:id' do
     redirect '/events'
   end
 end
-
