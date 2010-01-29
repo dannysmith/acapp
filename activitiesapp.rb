@@ -2,24 +2,6 @@
 enable :sessions
 use Rack::Flash
 
-#--------- Overides & Classes
-
-#Converts Time to dateTime
-class Time
-  def to_datetime
-    seconds = sec + Rational(usec, 10**6)
-    offset = Rational(utc_offset, 60 * 60 * 24)
-    DateTime.new(year, month, day, hour, min, seconds, offset)
-  end
-end
-
-#Twitter Class for posting.
-class Twitter
-  include HTTParty
-  base_uri "twitter.com"
-  basic_auth ENV["twitter_user"], ENV["twitter_pass"]
-end
-
 #--------- Models
 
 class Cadet
@@ -139,6 +121,23 @@ configure do
   DataMapper.auto_upgrade!
 end
 
+#--------- Overides & Classes
+
+#Converts Time to dateTime
+class Time
+  def to_datetime
+    seconds = sec + Rational(usec, 10**6)
+    offset = Rational(utc_offset, 60 * 60 * 24)
+    DateTime.new(year, month, day, hour, min, seconds, offset)
+  end
+end
+
+#Twitter Class for posting.
+class Twitter
+  include HTTParty
+  basic_auth(ENV["TWITTER_USER"], ENV["TWITTER_PASS"])
+end
+
 #--------- Helper Methods
 
 helpers do
@@ -152,7 +151,7 @@ helpers do
 
   def authorized?
     @auth ||=  Rack::Auth::Basic::Request.new(request.env)
-    @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == ['226', ENV["admin_pass"]]
+    @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == ['226', ENV["ADMIN_PASS"]]
   end
 
 end
@@ -215,7 +214,7 @@ end
 #View cadet
 get '/cadets/:id/?' do
   @cadet = Cadet.get(params[:id])
-  @require_response = Event.all - @cadet.events
+  @require_response = Event.all(:starts_at.gt => Time.now, :order => [ :starts_at.asc ]) - @cadet.events
   
   if @cadet
     haml :'cadets/show'
@@ -278,11 +277,15 @@ post '/events' do
   @event.starts_at = Chronic.parse(params[:starts_at]).to_datetime
   @event.finishes_at = Chronic.parse(params[:finishes_at]).to_datetime
   if @event.save
-    flash[:message] = "Event Created & message sent to Twitter"
+    
     #Post message to Twitter
-    url = "#{ENV["site_url"]}/events/#{@event.id}"
-    message = "New forthcoming activity: #{@event.truncated_title} #{ShortURL.shorten(url, :tinyurl)}"
-    tweet = Twitter.post("/statuses/update.json", :query => {:status => message})
+    url = ENV["SITE_URL"]
+    url = "#{url}/events/#{@event.id}"
+    message = "#{@event.truncated_title} - #{@event.starts_at.strftime('%d %b')} #{ShortURL.shorten(url, :tinyurl)}"
+    twt = Twitter.post("http://twitter.com/statuses/update.json", :query => {:status => message})
+    twitter_flash = twt["error"]
+    twitter_flash ? twitter_flash = "Twitter Error: #{twitter_flash}" : twitter_flash = "Message posted to twitter."
+    flash[:message] = "Event Created! #{twitter_flash}"
     redirect "/events/#{@event.id}"
   else
     flash[:message] = "The event couldn't be saved."
