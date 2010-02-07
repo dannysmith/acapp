@@ -40,6 +40,6 @@ if(IE6 && !(IE7 || IE8)) {
 
 if(IE7 && !(IE6 || IE8)) {
 	$(function(){
-	  $("#content").width(650).css({"margin-top":"-520px"});
+	  $("#content").width(650).css({"margin-top":"-500px"});
 	});
 }
