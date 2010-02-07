@@ -40,8 +40,6 @@ if(IE6 && !(IE7 || IE8)) {
 
 if(IE7 && !(IE6 || IE8)) {
 	$(function(){
-	  $("#content").width(650).css({"margin-top":"-620px"});
-	  $("#get-in-touch a").css({"padding-bottom":"1em", "padding-top":"0.2em"});
-	  $("#news #content").css({"margin-top":"-840px"});
+	  $("#content").width(650).css({"margin-top":"-520px"});
 	});
 }
