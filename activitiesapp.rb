@@ -153,6 +153,10 @@ helpers do
     @auth ||=  Rack::Auth::Basic::Request.new(request.env)
     @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == ['226', ENV["ADMIN_PASS"]]
   end
+  
+  def admin?
+    request.env['REMOTE_USER']
+  end
 
 end
 

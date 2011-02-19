@@ -42,10 +42,11 @@
               %a{:href => "/events"} Future Activities
             %li
               %a{:href => "/events/past"} Past Activities
-            %li
-              %a{:href => "/events/new"} Add an event
-            %li
-              %a{:href => "/cadets/new"} Add a new cadet
+            =if admin?
+              %li
+                %a{:href => "/events/new"} Add an event
+              %li
+                %a{:href => "/cadets/new"} Add a new cadet
         
         
         .box
