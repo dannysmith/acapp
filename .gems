@@ -1,6 +1,5 @@
 sinatra
 haml
-yaml
 tzinfo
 data_mapper
 dm-core
