@@ -1,4 +1,3 @@
-sinatra
 data_mapper
 dm-core
 dm-validations
@@ -7,8 +6,5 @@ rack-flash
 aaronh-chronic
 httparty
 shorturl
-haml
-tzinfo
-net/http
 uri
 ri_cal
