@@ -1,9 +1,13 @@
+sinatra
+haml
+yaml
+tzinfo
 data_mapper
 dm-core
 dm-validations
 dm-timestamps
 rack-flash
-aaronh-chronic
 httparty
 shorturl
 ri_cal
+aaronh-chronic
