@@ -1,21 +1,20 @@
 !!! 5
 %html
   %head
-    %title Brighton air Cadets - Events Manager
+    %title Brighton air Cadets - Calendar
     %meta{"http-equiv" => "content-type", :content => "application/xhtml+xml; charset=utf-8"}
     %meta{:name => :author, :content => "Danny Smith (dasmith.co.uk)"}
     
     %link{:rel => "stylesheet", :href => "http://brightonaircadets.com/styles.css", :media => "screen,projection", :type => "text/css"}    
     %link{:rel => "stylesheet", :href => "/styles.css", :media => "screen,projection", :type => "text/css"}    
     %link{:rel => "shortcut icon", :href => "http://brightonaircadets.com/favicon.png"}
-    %link{:type => "text/css", :href => "/ui-lightness/jquery-ui-1.7.2.custom.css", :rel => "stylesheet"}
+    %link{:rel => "stylesheet", :href => "/calendars.css", :media => "screen,projection", :type => "text/css"}    
+    
     %script{ :type=>"text/javascript", :src => "https://www.google.com/jsapi"}
     %script
       google.load('jquery', '1.3.2');
-      google.load("jqueryui", "1.8.9");
     %script{ :type => "text/javascript", :src => "/jquery.ie6blocker.js"}   
-    %script{ :type => "text/javascript", :src => "/tiny_mce/jquery.tinymce.js"}
-    %script{ :type => "text/javascript", :src => "/timepicker.js"}
+    %script{ :type => "text/javascript", :src => "/tiny_mce/jquery.tinymce.js"}   
     %script{ :type => "text/javascript", :src => "/application.js"}
     
   %body#acapp
@@ -25,7 +24,8 @@
         %h3 squadron administration
         #nav
           %ul
-            %li.current-page Bid for an Activity
+            %li
+              %a{:href => "/"} Bid for an Activity
             |
             %li
               %a{:href => "http://admin.brightonaircadets.com"} Notices
@@ -33,33 +33,19 @@
             %li
               %a{:href => "/programme"} Programme
             |
-            %li
-              %a{:href => "/listing"} Calendar
+            %li.current-page Calendar
+
     
     #wrapper
       #sidebar
         .box
-          %h4 Activities Navigation
-          %ul
-            %li
-              %a{:href => "/events"} Bid for an Activity
-            %li
-              %a{:href => "/cadets"} List of Cadets
-            -if admin?
-              %li
-                %a{:href => "/events/past"} Past Activities
-              %li
-                %a{:href => "/events/new"} Add an event
-              %li
-                %a{:href => "/cadets/new"} Add a new cadet
-              %li
-                %a{:href => "/cadets/codes"} Cadet Codes
-            -else
-              %li
-                %a{:href => "/cadets/codes"} Staff Log In
-        
+          %h4 Events Calendar
+          %p This page shows the weekend and non-parade evening events planned for the next few months. It's subject to change.
+          -if admin?
+            %p.admin-notice Staff: You can change the information shown here by editing the Google Calendar.
         .box
           =erb :ji_partial
+        
         
         <div class="box social"><h4>Talk to us</h4><a href="http://www.facebook.com/brightonaircadets" target="_blank"><img src="http://brightonaircadets.com/images/icon-fb.png" alt="BEcome a fan on facebook!" /></a><a href="http://twitter.com/brightoncadets" target="_blank"><img src="http://brightonaircadets.com/images/icon-t.png" alt="Follow us on twitter" /></a><a href="mailto:adj.226@aircadets.org"><img src="http://brightonaircadets.com/images/icon-e.png" /></a></div>
 
@@ -67,8 +53,26 @@
           %p &copy; Copyright 2009 226 (Brighton) Sqn, ATC. All Rights Reserved.
           %p Design & Development by <a href="http://dasmith.co.uk">Danny Smith</a></p>
 
-      #content
+      #content.events
         - if flash[:message]
           .flash
             = flash[:message]
-        = yield
+
+        %header
+          %h1=@calendar_name
+          %h2 The Next #{ENV['lookahead1']} Days
+        -for event in @events
+          .event{ :class => (to_timezone(event.start_time) === @today ? 'today' : '') }
+            .date
+              .month=to_timezone(event.start_time).strftime '%b'
+              .day=to_timezone(event.start_time).strftime '%d'
+            .details
+              %h3=h event.summary
+              -if !event.description.empty?
+                .description=h event.description
+              %dl
+                -if !event.location.empty?
+                  %dt Where
+                  %dd=h event.location
+                %dt When
+                %dd=format_time_range(event.start_time, event.finish_time)

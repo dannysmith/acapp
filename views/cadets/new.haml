@@ -1,12 +1,12 @@
-%h2 New Cadet
+%h2 Add a Cadet
 %form{:method => :post, :action => "/cadets"}
   %label{:name => :first_name} Name
-  %input#first_name{:type => :text, :name => :first_name}
-  %input#surname{:type => :text, :name => :surname}
+  %input#first_name{:type => :text, :name => :first_name, :placeholder => "First name"}
+  %input#surname{:type => :text, :name => :surname, :placeholder => "Surname"}
   
   %br
   %label{:name => :first_name} Section
-  %input#section.short{:type => :text, :name => :section, :size => 3}
+  %input#section.short{:type => :text, :name => :section, :size => 5, :placeholder => "Section"}
   
   %br
   %input.submit{:type => :submit, :value => "Submit"}

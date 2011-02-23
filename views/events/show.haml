@@ -1,11 +1,10 @@
 %h2 #{@event.title}
 %p.date #{@event.date}
 
-%p.description #{@event.description}
-%p.timing Starts at: #{@event.start_time}, #{@event.start_date}
-%p.timing Finishes at: #{@event.finish_time}, #{@event.finish_date}
+.event-description #{@event.description}
+%p.timing Starts at: #{@event.start_time}, #{@event.start_date}. Finishes at: #{@event.finish_time}, #{@event.finish_date}
 
-%form{:method => :post, :action => "/events/#{@event.id}/allocate"}
+%form#signup-form{:method => :post, :action => "/events/#{@event.id}/allocate"}
   %fieldset.allocate
     %legend Are you attending?
     %label{:name => :cadet_id} Name
@@ -42,12 +41,13 @@
     %ul
       - @cadets_not_responded.each do |c|
         %li #{c.full_name} 
-      
-          
-%form{:method => :post, :action => "/events/#{@event.id}"}
-  %fieldset
-    %legend Event Administration
-    %input{:type => :hidden, :name => :_method, :value => "delete"}
-    %input{:type => :submit, :value => "Delete"}
-    %a{:href => "/events/#{@event.id}/edit"} Edit
+.clear
+
+-if admin?
+  %form{:method => :post, :action => "/events/#{@event.id}"}
+    %fieldset
+      %legend Event Administration
+      %input{:type => :hidden, :name => :_method, :value => "delete"}
+      %input{:type => :submit, :value => "Delete"}
+      %a{:href => "/events/#{@event.id}/edit"} Edit
 

@@ -1,16 +1,16 @@
-%h2 New Activity
+%h2 Add an Event
 %form{:action => "/events", :method => :post}
   %label Title
   %input#title{:type => :text, :name => :title}
   %br
   %label Details
-  %textarea.tinymce{:name => :description}
+  %textarea.tinymce{:name => :description, :id => :description}
   %br
   %label Starts
-  %input#starts_at{:type => :text, :name => :starts_at}
+  %input.datepicker#starts_at{:type => :text, :name => :starts_at}
   %br
   %label Ends
-  %input#finishes_at{:type => :text, :name => :finishes_at}
+  %input.datepicker#finishes_at{:type => :text, :name => :finishes_at}
   
   .date_info
     = haml :'events/_date_info', :layout => false

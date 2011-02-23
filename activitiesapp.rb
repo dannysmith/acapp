@@ -1,4 +1,4 @@
-%w(rubygems sinatra dm-core dm-validations dm-timestamps rack-flash chronic httparty shorturl haml yaml).each {|r| require r}
+%w(rubygems sinatra dm-core dm-validations dm-timestamps rack-flash aaronh-chronic httparty haml yaml tzinfo net/http uri ri_cal).each {|r| require r}
 enable :sessions
 use Rack::Flash
 
@@ -84,7 +84,7 @@ class Event
   
   def truncated_title
     if self.title.length > 30
-      self.title.slice(0..30) + "…"
+      self.title.slice(0..30) + "..."
     else
       self.title
     end
@@ -110,15 +110,16 @@ end
 configure do
   #Load passwords from config file
   if File.exist?("./config.yml") 
-    yaml = YAML.load_file("./config.yml")
-    yaml.each do |k, v|
-      ENV[k] = v
+    config = YAML.load_file("./config.yml")
+    config.each do |k, v|
+      ENV[k] = v.to_s
     end
+    set :timezone, TZInfo::Timezone.get(config['timezone'])
   end
     
   # Checks whether we're on heroku or local. Loads correct DB.
   DataMapper.setup(:default, (ENV["DATABASE_URL"] || "sqlite3:///#{Dir.pwd}/activitiesapp.sqlite3"))
-  DataMapper.auto_upgrade!
+  #DataMapper.auto_upgrade!
 end
 
 #--------- Overides & Classes
@@ -142,22 +143,71 @@ end
 
 helpers do
 
-  def protected!
-    unless authorized?
-      response['WWW-Authenticate'] = %(Basic realm="226 Activities Mgmt Staff")
-      throw(:halt, [401, "Not authorized\n"])
-    end
+  def auth
+    @auth ||= Rack::Auth::Basic::Request.new(request.env)
+  end
+
+  def unauthorized!(realm="localhost")
+    response['WWW-Authenticate'] = %(Basic realm="#{realm}")
+    throw :halt, [ 401, 'Authorization Required' ]
+  end
+
+  def bad_request!
+    throw :halt, [ 400, 'Bad Request' ]
   end
 
   def authorized?
-    @auth ||=  Rack::Auth::Basic::Request.new(request.env)
-    @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == ['226', ENV["ADMIN_PASS"]]
-  end
-  
-  def admin?
     request.env['REMOTE_USER']
   end
 
+  def authorize(username, password)
+    if username == "226" && password == ENV["ADMIN_PASS"]
+      session['admin'] = true
+      return true
+    end
+    false
+  end
+
+  def protected!
+    return if authorized?
+    unauthorized! unless auth.provided?
+    bad_request! unless auth.basic?
+    unauthorized! unless authorize(*auth.credentials)
+    request.env['REMOTE_USER'] = auth.username
+  end
+
+  def admin?
+    session['admin']
+  end
+  
+  def format_time_range(start_time, end_time)
+    output = format_time(start_time)
+    output << " &mdash; #{format_time(end_time)}" unless end_time.nil?
+    output << ", #{to_timezone(start_time).strftime('%d %b %Y')}"
+  end
+  
+  def format_time(datetime)
+    to_timezone(datetime).strftime('%I:%M%p')
+  end
+  
+  def to_timezone(datetime)
+    options.timezone.utc_to_local(datetime.new_offset(0))
+  end
+  
+  def to_timezone_date(datetime)
+    current = to_timezone(datetime)
+    Date.new(current.year, current.month, current.day)
+  end
+  
+  def gcal_url(cal)
+    "http://www.google.com/calendar/ical/#{ENV[cal]}/public/basic.ics"
+  end
+  
+  def gcal_feed_url(cal)
+    "http://www.google.com/calendar/feeds/#{ENV[cal]}/public/basic"
+  end
+  
+  alias_method :h, :escape_html
 end
 
 #--------- Page Handlers - General
@@ -285,7 +335,7 @@ post '/events' do
     #Post message to Twitter
     url = ENV["SITE_URL"]
     url = "#{url}/events/#{@event.id}"
-    message = "#{@event.truncated_title} - #{@event.starts_at.strftime('%d %b')} #{ShortURL.shorten(url, :tinyurl)}"
+    message = "#{@event.truncated_title} #{url}"
     twt = Twitter.post("http://twitter.com/statuses/update.json", :query => {:status => message})
     twitter_flash = twt["error"]
     twitter_flash ? twitter_flash = "Twitter Error: #{twitter_flash}" : twitter_flash = "Message posted to twitter."
@@ -399,4 +449,45 @@ put '/events/:id' do
     flash[:message] = "Sorry, the record couldn't be updated."
     redirect '/events'
   end
+end
+
+
+
+
+
+########## Other Pages ##########
+
+get "/programme" do
+  ical_string = Net::HTTP.get URI.parse(gcal_url("gcal1"))
+  components = RiCal.parse_string ical_string
+  @calendar = components.first
+  @calendar_name = @calendar.x_properties['X-WR-CALNAME'].first.value
+  @today = to_timezone_date(DateTime.now)
+  occurrences = @calendar.events.map do |e|
+    e.occurrences(:starting => @today, :before => @today + ENV['lookahead1'].to_i)
+  end
+  @events = occurrences.flatten.sort { |a,b| a.start_time <=> b.start_time }
+  
+  haml :'gcal/programme', :layout => false
+end
+
+
+
+
+get "/listing" do
+  ical_string = Net::HTTP.get URI.parse(gcal_url("gcal2"))
+  components = RiCal.parse_string ical_string
+  @calendar = components.first
+  @calendar_name = @calendar.x_properties['X-WR-CALNAME'].first.value
+  @today = to_timezone_date(DateTime.now)
+  occurrences = @calendar.events.map do |e|
+    e.occurrences(:starting => @today, :before => @today + ENV['lookahead2'].to_i)
+  end
+  @events = occurrences.flatten.sort { |a,b| a.start_time <=> b.start_time }
+  
+  haml :'gcal/eventlisting', :layout => false
+end
+
+get "/hello" do
+  haml :hello, :layout => false
 end

@@ -1,7 +1,7 @@
-%h2 Cadets with Access Codes
-%p These access codes are to be kept private. Each cadets should be told their access code when their record is created.
+%h2 Cadet Access Codes
+%p These access codes are to be kept private. Each cadet should be told their access code when their record is created.
 
-%table.eventlist
+%table.eventlist{ :cellspacing => 0 }
   %thead
     %tr
       %th Cadet
@@ -11,5 +11,5 @@
       %tr
         %td
           %a{:href => "/cadets/#{cadet.id}"} #{cadet.full_name}
-        %td #{cadet.code}
+        %td.num #{cadet.code}
       

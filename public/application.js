@@ -48,4 +48,10 @@ $().ready(function() {
     theme : "simple"
   });
   
+  $('.datepicker').datepicker({
+  	duration: '',
+      showTime: true,
+      constrainInput: false
+   });
+  
 });
