@@ -1,2 +1,2 @@
-require 'activitiesapp'
+require './activitiesapp'
 run Sinatra::Application
