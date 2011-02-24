@@ -43,9 +43,9 @@
       #sidebar
         .box
           %h4 Events Calendar
-          %p This page shows the weekend and non-parade evening events planned for the next few months. It's subject to change.
+          %p.bugfix This page shows the weekend and non-parade evening events planned for the next few months. It's subject to change.
           -if admin?
-            %p.admin-notice Staff: You can change the information shown here by editing the Google Calendar.
+            %p.admin-notice.bugfix Staff: You can change the information shown here by editing the Google Calendar.
         .box
           =erb :ji_partial
         
