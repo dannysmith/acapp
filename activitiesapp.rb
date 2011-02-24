@@ -1,8 +1,7 @@
-%w(rubygems sinatra dm-core dm-validations dm-timestamps rack-flash chronic httparty haml yaml tzinfo net/http uri ri_cal).each {|r| require r}
+%w(rubygems sinatra dm-core dm-validations dm-timestamps rack-flash aaronh-chronic httparty haml yaml tzinfo net/http uri ri_cal).each {|r| require r}
 enable :sessions
 use Rack::Flash
 
-#aaronh-
 
 #--------- Models
 
