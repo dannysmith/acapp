@@ -1,6 +1,7 @@
 sinatra
 haml
 tzinfo
+dm-postgres-adapter
 data_mapper
 dm-core
 dm-validations
@@ -9,5 +10,4 @@ rack-flash
 httparty
 shorturl
 ri_cal
-pg
 chronic
