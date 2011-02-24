@@ -120,7 +120,7 @@ configure do
   end
     
   # Checks whether we're on heroku or local. Loads correct DB.
-  DataMapper.setup(:default, (ENV["DATABASE_URL"] || "sqlite3:///#{Dir.pwd}/activitiesapp.sqlite3"))
+  DataMapper.setup(:default, (ENV["DATABASE_URL"] || "sqlite3:///#{Dir.pwd}/live-data.db"))
   #DataMapper.auto_upgrade!
 end
 
