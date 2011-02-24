@@ -1,4 +1,4 @@
-%w(sinatra dm-core dm-validations dm-timestamps rack-flash httparty haml yaml tzinfo net/http uri ri_cal chronic).each {|r| require r}
+%w(sinatra dm-core dm-validations dm-timestamps rack-flash httparty haml yaml tzinfo net/http uri ri_cal aaronh-chronic).each {|r| require r}
 enable :sessions
 use Rack::Flash
 
