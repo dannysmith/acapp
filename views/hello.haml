@@ -13,6 +13,9 @@
     %script{ :type=>"text/javascript", :src => "https://www.google.com/jsapi"}
     %script
       google.load('jquery', '1.3.2');
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
     %script{ :type => "text/javascript", :src => "/jquery.ie6blocker.js"}   
     %script{ :type => "text/javascript", :src => "/tiny_mce/jquery.tinymce.js"}   
     %script{ :type => "text/javascript", :src => "/application.js"}
