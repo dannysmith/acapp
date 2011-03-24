@@ -183,13 +183,14 @@ helpers do
   end
   
   def format_time_range(start_time, end_time)
-    output = format_time(start_time)
-    output << " &mdash; #{format_time(end_time)}" unless end_time.nil?
-    output << ", #{to_timezone(start_time).strftime('%d %b %Y')}"
-  end
-  
-  def format_time(datetime)
-    to_timezone(datetime).strftime('%I:%M%p')
+    output = to_timezone(start_time).strftime('%H%Mhrs')
+    output << ", #{to_timezone(start_time).strftime('%d %b %Y')}" if start_time.day != end_time.day
+    output << " &mdash; #{to_timezone(end_time).strftime('%H%Mhrs')}" unless end_time.nil?
+    if start_time.day == end_time.day
+      output << ", #{to_timezone(start_time).strftime('%d %b %Y')}"
+    else
+      output << ", #{to_timezone(end_time).strftime('%d %b %Y')}"
+    end
   end
   
   def to_timezone(datetime)
