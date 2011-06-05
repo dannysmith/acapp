@@ -22,9 +22,12 @@
       %input#attending{:type => :radio, :name => :attending, :value => :true} Yes
       %input#attending{:type => :radio, :name => :attending, :value => :false} No
     
-      %br
-      %label{:name => :code} Your Code
-      %input#code.short{:type => :text, :name => :code, :size => 3}
+      -unless admin?
+        %br
+        %label{:name => :code} Your Code
+        %input#code.short{:type => :text, :name => :code, :size => 3}
+      -else
+        %input#is-admin{:type => :hidden, :value => "true"}
     
       %p I will <span id="not_be">not </span>be attending the above event.
       %input#submit_form{:type => :submit, :value => "Submit"}

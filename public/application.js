@@ -24,8 +24,12 @@ $().ready(function() {
       $('#not_be').show();
     }
     
-    $('#acapp #code').attr("disabled", false);
-    
+    if ($('#acapp #is-admin').val() == "true") {
+      // If Admin, do not check form field
+      $('#acapp #submit_form').attr("disabled", false);
+    } else {
+      $('#acapp #code').attr("disabled", false);
+    }
   });
   
   

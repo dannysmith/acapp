@@ -389,7 +389,7 @@ end
 
 #Create or update an allocation
 post '/events/:id/allocate/?' do
-  if params[:code] == Cadet.get(params[:cadet_id]).code #If the access code is correct.
+  if params[:code] == Cadet.get(params[:cadet_id]).code || admin? #If the access code is correct.
     
     @allocation = Allocation.get(params[:cadet_id], params[:id]) #Get the allocation record if it exists - this is an update.
     @allocation ||= Allocation.new(:event_id => params[:id], :cadet_id => params[:cadet_id], :responded => true) #Or create a new record.
