@@ -1,4 +1,4 @@
-%w(sinatra dm-core dm-validations dm-timestamps rack-flash httparty haml yaml tzinfo net/http uri ri_cal chronic).each {|r| require r}
+%w(sinatra dm-core dm-validations dm-timestamps dm-migrations rack-flash httparty haml yaml tzinfo net/http uri ri_cal chronic).each {|r| require r}
 enable :sessions
 use Rack::Flash
 
@@ -38,6 +38,7 @@ class Event
   property :description,  Text,    :required => true # cannot be null
   property :starts_at,    DateTime,    :required => true # cannot be null
   property :finishes_at,  DateTime,    :required => true # cannot be null
+  property :locked,       Boolean,     :default => false
   property :created_at,   DateTime
   property :updated_at,   DateTime
 
@@ -121,7 +122,7 @@ configure do
     
   # Checks whether we're on heroku or local. Loads correct DB.
   DataMapper.setup(:default, (ENV["DATABASE_URL"] || "sqlite3:///#{Dir.pwd}/live-data.db"))
-  #DataMapper.auto_upgrade!
+  DataMapper.auto_upgrade!
 end
 
 #--------- Overides & Classes
@@ -454,7 +455,19 @@ put '/events/:id' do
   end
 end
 
-
+#Update Event (Locking Event Hack)
+put '/events/:id/togglelock' do
+  protected!
+  @event = Event.get(params[:id])
+  @event.locked = !@event.locked?
+  if @event.save
+    flash[:message] = "Lock setting changed - lock set to: #{@event.locked}"
+    redirect "/events/#{@event.id}"
+  else
+    flash[:message] = "Sorry, the record couldn't be updated."
+    redirect '/events'
+  end
+end
 
 
 

@@ -7,6 +7,7 @@ data_mapper
 dm-core
 dm-validations
 dm-timestamps
+dm-migrations
 rack-flash
 httparty
 shorturl

@@ -155,6 +155,14 @@ table.eventlist td.num {
   display: none;
 }
 
+#acapp .locked {
+  font-size: 1.3em;
+  text-align: center;
+  font-weight: bold;
+  color: #930000;
+  margin-top: 1em;
+}
+
 #acapp .date_info {
   font-size: 0.75em;
   margin-left: 90px;
