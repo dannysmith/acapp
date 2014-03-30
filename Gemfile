@@ -19,6 +19,7 @@ gem 'ri_cal'
 gem 'chronic'
 gem 'rdiscount'
 gem 'puma'
+gem 'RedCloth'
 
 group :development do
   gem 'dm-sqlite-adapter'

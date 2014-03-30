@@ -1,4 +1,4 @@
-%w(sinatra dm-core dm-validations dm-timestamps dm-migrations rack-flash httparty haml yaml tzinfo net/http uri ri_cal chronic rdiscount).each {|r| require r}
+%w(sinatra dm-core dm-validations dm-timestamps dm-migrations rack-flash httparty haml yaml tzinfo net/https uri ri_cal chronic rdiscount redcloth).each {|r| require r}
 #--------- Models
 
 class Cadet
@@ -490,7 +490,10 @@ class AcApp < Sinatra::Base
   ########## Other Pages ##########
 
   get "/programme" do
-    ical_string = Net::HTTP.get URI.parse(gcal_url('GCAL1'))
+    https = Net::HTTP.new('www.google.com', 443)
+    https.use_ssl = true
+    https.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    ical_string = https.get(gcal_url('GCAL1')).body
     components = RiCal.parse_string ical_string
     @calendar = components.first
     @calendar_name = @calendar.x_properties['X-WR-CALNAME'].first.value
@@ -507,7 +510,10 @@ class AcApp < Sinatra::Base
 
 
   get "/listing" do
-    ical_string = Net::HTTP.get URI.parse(gcal_url('GCAL2'))
+    https = Net::HTTP.new('www.google.com', 443)
+    https.use_ssl = true
+    https.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    ical_string = https.get(gcal_url('GCAL2')).body
     components = RiCal.parse_string ical_string
     @calendar = components.first
     @calendar_name = @calendar.x_properties['X-WR-CALNAME'].first.value

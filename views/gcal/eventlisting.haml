@@ -63,7 +63,7 @@
 
         %header
           %h1=@calendar_name
-          %h2 The Next #{ENV['lookahead1']} Days
+          %h2 The Next #{ENV['LOOKAHEAD2']} Days
         -for event in @events
           .event{ :class => (to_timezone(event.start_time) === @today ? 'today' : '') }
             .date

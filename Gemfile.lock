@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    RedCloth (4.2.9)
     addressable (2.3.6)
     atomic (1.1.16)
     better_errors (1.1.0)
@@ -110,6 +111,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  RedCloth
   better_errors
   binding_of_caller
   bundler (> 1.2.0)
