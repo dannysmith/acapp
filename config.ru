@@ -3,7 +3,6 @@
 require 'rubygems'
 require 'bundler/setup'
 require 'sinatra/base'
-require 'pry'
 require './activitiesapp'
 
 run AcApp
