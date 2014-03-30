@@ -16,11 +16,13 @@ gem 'ri_cal'
 gem 'chronic'
 gem 'rdiscount'
 
-gem 'growl'
-gem 'guard', '~> 2'
-gem 'guard-bundler'
-gem 'guard-puma'
+group :development do
+  gem 'growl'
+  gem 'guard', '~> 2'
+  gem 'guard-bundler'
+  gem 'guard-puma'
 
-gem 'pry'
-gem 'binding_of_caller'
-gem 'better_errors'
+  gem 'pry'
+  gem 'binding_of_caller'
+  gem 'better_errors'
+end
