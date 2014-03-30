@@ -1,8 +1,7 @@
 source 'https://rubygems.org'
-
-gem 'bundler', '>1.2.0'
 ruby '1.9.3'
 
+gem 'bundler', '>1.2.0'
 gem 'sinatra'
 gem 'pg'
 gem 'datamapper'
@@ -10,7 +9,6 @@ gem 'dm-core'
 gem 'dm-validations'
 gem 'dm-timestamps'
 gem 'dm-migrations'
-gem 'dm-sqlite-adapter'
 gem 'rack-flash3'
 gem 'httparty'
 gem 'haml'
@@ -21,6 +19,7 @@ gem 'chronic'
 gem 'rdiscount'
 
 group :development do
+  gem 'dm-sqlite-adapter'
   gem 'growl'
   gem 'guard', '~> 2'
   gem 'guard-bundler'
