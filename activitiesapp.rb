@@ -137,7 +137,7 @@ class AcApp < Sinatra::Base
     require './development-envs'
 
     use BetterErrors::Middleware
-    BetterErrors.application_root = __dir__
+    BetterErrors.application_root = File.expand_path File.dirname(__FILE__)
     BetterErrors.editor = :sublime
   end
 
