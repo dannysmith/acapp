@@ -162,6 +162,7 @@ DEPENDENCIES
   httparty
   pg
   pry
+  puma
   rack-flash3
   rdiscount
   ri_cal
