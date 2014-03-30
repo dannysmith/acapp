@@ -4,22 +4,22 @@
     %title Brighton air Cadets - Calendar
     %meta{"http-equiv" => "content-type", :content => "application/xhtml+xml; charset=utf-8"}
     %meta{:name => :author, :content => "Danny Smith (dasmith.co.uk)"}
-    
-    %link{:rel => "stylesheet", :href => "http://brightonaircadets.com/styles.css", :media => "screen,projection", :type => "text/css"}    
-    %link{:rel => "stylesheet", :href => "/styles.css", :media => "screen,projection", :type => "text/css"}    
+
+    %link{:rel => "stylesheet", :href => "http://brightonaircadets.com/styles.css", :media => "screen,projection", :type => "text/css"}
+    %link{:rel => "stylesheet", :href => "/styles.css", :media => "screen,projection", :type => "text/css"}
     %link{:rel => "shortcut icon", :href => "http://brightonaircadets.com/favicon.png"}
-    %link{:rel => "stylesheet", :href => "/calendars.css", :media => "screen,projection", :type => "text/css"}    
-    
+    %link{:rel => "stylesheet", :href => "/calendars.css", :media => "screen,projection", :type => "text/css"}
+
     %script{ :type=>"text/javascript", :src => "https://www.google.com/jsapi"}
     %script
       google.load('jquery', '1.3.2');
     <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    %script{ :type => "text/javascript", :src => "/jquery.ie6blocker.js"}   
-    %script{ :type => "text/javascript", :src => "/tiny_mce/jquery.tinymce.js"}   
+    %script{ :type => "text/javascript", :src => "/jquery.ie6blocker.js"}
+    %script{ :type => "text/javascript", :src => "/tiny_mce/jquery.tinymce.js"}
     %script{ :type => "text/javascript", :src => "/application.js"}
-    
+
   %body#acapp
     #header-wrap
       #header
@@ -38,7 +38,7 @@
             |
             %li.current-page Calendar
 
-    
+
     #wrapper
       #sidebar
         .box
@@ -48,13 +48,13 @@
             %p.admin-notice.bugfix Staff: You can change the information shown here by editing the Google Calendar.
         .box
           =erb :ji_partial
-        
-        
+
+
         <div class="box social"><h4>Talk to us</h4><a href="http://www.facebook.com/brightonaircadets" target="_blank"><img src="http://brightonaircadets.com/images/icon-fb.png" alt="BEcome a fan on facebook!" /></a><a href="http://twitter.com/brightoncadets" target="_blank"><img src="http://brightonaircadets.com/images/icon-t.png" alt="Follow us on twitter" /></a><a href="mailto:adj.226@aircadets.org"><img src="http://brightonaircadets.com/images/icon-e.png" /></a></div>
 
         .box#copyright
           %p &copy; Copyright 2009 226 (Brighton) Sqn, ATC. All Rights Reserved.
-          %p Design & Development by <a href="http://dasmith.co.uk">Danny Smith</a></p>
+          %p Developed in a day by <a href="http://dasmith.co.uk">Danny Smith</a>.</p>
 
       #content.events
         - if flash[:message]
