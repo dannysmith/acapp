@@ -1,2 +1,4 @@
 *.sqlite3
 *.db
+config.yml
+development-envs.rb
