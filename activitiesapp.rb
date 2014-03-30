@@ -1,4 +1,4 @@
-%w(better_errors sinatra dm-core dm-validations dm-timestamps dm-migrations rack-flash httparty haml yaml tzinfo net/http uri ri_cal chronic rdiscount).each {|r| require r}
+%w(sinatra dm-core dm-validations dm-timestamps dm-migrations rack-flash httparty haml yaml tzinfo net/http uri ri_cal chronic rdiscount).each {|r| require r}
 #--------- Models
 
 class Cadet
@@ -134,6 +134,7 @@ class AcApp < Sinatra::Base
 
   configure(:development) do
     require 'better_errors'
+    require 'pry'
     require './development-envs'
 
     use BetterErrors::Middleware
