@@ -533,7 +533,4 @@ class AcApp < Sinatra::Base
     haml :hello, :layout => false
   end
 
-  get '/sessiondata' do
-    session.inspect
-  end
 end
