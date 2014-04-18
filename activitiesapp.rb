@@ -154,7 +154,7 @@ class AcApp < Sinatra::Base
     set :timezone, TZInfo::Timezone.get(ENV['TIMEZONE'])
 
     # Checks whether we're on heroku or local. Loads correct DB.
-    DataMapper.setup(:default, (ENV["DATABASE_URL"] || "sqlite3:///#{Dir.pwd}/dev-data.db"))
+    DataMapper.setup(:default, (ENV["DATABASE_URL"] || "postgres://localhost/acapp"))
     DataMapper.auto_upgrade!
   end
 
