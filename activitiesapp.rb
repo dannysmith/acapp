@@ -133,6 +133,7 @@ class AcApp < Sinatra::Base
 
   set :session_secret, ENV['SESSION_KEY']
   use Rack::Flash
+  use Rack::MethodOverride ##<-- Required for put delete
   #--------- Configuration Block
 
   configure(:development) do
