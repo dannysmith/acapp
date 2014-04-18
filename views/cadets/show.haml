@@ -1,4 +1,12 @@
 %h2 #{@cadet.full_name}
+-if admin?
+  %form{:method => :post, :action => "/cadets/#{@cadet.id}"}
+    %fieldset
+      %legend Cadet Administration
+      %input{:type => :hidden, :name => :_method, :value => "delete"}
+      %input{:type => :submit, :value => "Delete"}
+      %a{:href => "/cadets/#{@cadet.id}/edit"} Edit
+
 
 %h3 Activities you've signed up for
 %p These are the activities you've agreed to attend.
@@ -27,11 +35,3 @@
         %td
           %a{:href => "/events/#{event.id}"} #{event.truncated_title}
         %td #{event.date}
-
--if admin?        
-  %form{:method => :post, :action => "/cadets/#{@cadet.id}"}
-    %fieldset
-      %legend Record Administration
-      %input{:type => :hidden, :name => :_method, :value => "delete"}
-      %input{:type => :submit, :value => "Delete"}
-      %a{:href => "/cadets/#{@cadet.id}/edit"} Edit

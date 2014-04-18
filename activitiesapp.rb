@@ -129,6 +129,9 @@ end
 class AcApp < Sinatra::Base
 
   enable :sessions
+  #use Rack::Session::Cookie
+
+  set :session_secret, ENV['SESSION_KEY']
   use Rack::Flash
   #--------- Configuration Block
 
@@ -528,5 +531,9 @@ class AcApp < Sinatra::Base
 
   get "/hello" do
     haml :hello, :layout => false
+  end
+
+  get '/sessiondata' do
+    session.inspect
   end
 end
