@@ -72,8 +72,8 @@
               %h3=h event.summary
               -if !event.description.empty?
                 .description
-                  :textile
-                    #{h event.description}
+                  / :textile
+                  #{h event.description}
               %dl
                 -if !event.location.empty?
                   %dt Where

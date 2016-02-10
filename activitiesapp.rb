@@ -1,4 +1,4 @@
-%w(sinatra dm-core dm-validations dm-timestamps dm-migrations rack-flash httparty haml yaml tzinfo net/https uri ri_cal chronic rdiscount redcloth).each {|r| require r}
+%w(sinatra dm-core dm-validations dm-timestamps dm-migrations rack-flash httparty haml yaml tzinfo net/https uri ri_cal chronic rdiscount redcloth tilt/haml tilt/erubis).each {|r| require r}
 #--------- Models
 
 class Cadet
@@ -224,7 +224,7 @@ class AcApp < Sinatra::Base
     end
 
     def gcal_url(cal)
-      "https://www.google.com/calendar/ical/#{ENV[cal]}/public/basic.ics"
+      "https://calendar.google.com/calendar/ical/#{ENV[cal]}/public/basic.ics"
     end
 
     def gcal_feed_url(cal)
