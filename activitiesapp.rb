@@ -1,4 +1,4 @@
-%w(sinatra dm-core dm-validations dm-timestamps dm-migrations rack-flash httparty haml yaml tzinfo net/https uri ri_cal chronic rdiscount redcloth tilt/haml tilt/erubis).each {|r| require r}
+%w(sinatra dm-core dm-validations dm-timestamps dm-migrations rack-flash httparty haml yaml tzinfo net/https uri ri_cal chronic rdiscount redcloth tilt/haml).each {|r| require r}
 #--------- Models
 
 class Cadet
